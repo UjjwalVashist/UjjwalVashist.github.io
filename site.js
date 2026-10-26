@@ -3,7 +3,7 @@
   const root = document.documentElement;
   root.classList.add("js");
   try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch {}
-  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDark = () => root.dataset.theme === "dark";  // white by default; dark only when chosen
 
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("theme");
