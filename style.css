@@ -41,7 +41,7 @@ nav.links a { text-decoration: none; color: var(--text-2); } nav.links a:hover {
 .actions { display: flex; gap: 8px; align-items: center; }
 
 /* hero */
-.hero { padding: 72px 0 40px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+.hero { padding: 72px 0 40px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: center; }
 .hero h1 { font-size: clamp(52px, 9vw, 104px); line-height: .95; letter-spacing: -.04em; margin: 18px 0 22px; font-weight: 600; }
 .hero h1 span { color: var(--text-3); }
 .hero p.lead { font-size: 20px; color: var(--text-2); max-width: 30ch; margin: 0 0 28px; }
@@ -151,3 +151,45 @@ table.t th { font: 500 12px var(--mono); text-transform: uppercase; letter-spaci
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .case { transition: none; } }
 @media (max-width: 520px) { .brand .mono { display: none; } }
+
+/* interactive chart */
+.picker { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 2px; }
+.picker button { font: 12px var(--mono); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--text-2); cursor: pointer; }
+.picker button:hover { color: var(--text); border-color: var(--text-3); }
+.picker button[aria-checked="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.picker button.flag::after { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--hot); margin-left: 6px; vertical-align: 1px; }
+svg.fig.live .bar { fill: var(--bar); transform-box: fill-box; transform-origin: 50% 100%; transition: transform .5s cubic-bezier(.2,.8,.2,1), fill .3s, opacity .2s; }
+svg.fig.live .bar.hot { fill: var(--hot); }
+svg.fig.live .bar.dim { opacity: .35; }
+svg.fig.live .hit { fill: transparent; cursor: crosshair; outline: none; }
+svg.fig .callout.quiet { fill: var(--text-3); }
+.readout { font-size: 14px; color: var(--text-2); display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+.readout b { color: var(--text); font-weight: 500; }
+.verdict { font: 500 11px var(--mono); padding: 2px 8px; border-radius: 999px; margin-left: 4px; }
+.verdict.good { background: color-mix(in srgb, #2eb872 18%, transparent); color: #2b9a62; }
+.verdict.ok { background: var(--accent-soft); color: var(--accent); }
+.verdict.bad { background: color-mix(in srgb, var(--hot) 20%, transparent); color: var(--hot); }
+.tip { position: absolute; pointer-events: none; transform: translateY(-100%); background: var(--text); color: var(--bg); border-radius: 8px; padding: 7px 10px; font: 12px/1.45 var(--mono); display: grid; min-width: 140px; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.tip .up { color: var(--hot); filter: brightness(1.2); }
+
+/* small charts in the project cards */
+figure.mini { margin: 18px 0 0; padding: 14px 0 0; border-top: 1px solid var(--line); }
+figure.mini figcaption { font: 12px var(--mono); color: var(--text-3); margin: 0 0 8px; }
+figure.mini ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 5px; }
+figure.mini li { display: grid; grid-template-columns: 11.5em 1fr 2.2em; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); }
+figure.mini li i { height: 8px; border-radius: 0 4px 4px 0; background: var(--bar); width: var(--w); min-width: 3px; transition: width .8s cubic-bezier(.2,.8,.2,1); }
+figure.mini li:first-child i { background: var(--hot); }
+figure.mini li b { font: 500 12px var(--mono); color: var(--text); text-align: right; }
+.case:hover figure.mini li i { filter: brightness(1.1); }
+@media (max-width: 420px) { figure.mini li { grid-template-columns: 9.5em 1fr 2em; } }
+
+/* scroll: active section in the menu, gentle reveal (only with JavaScript, never with reduced motion) */
+nav.links a.on { color: var(--text); }
+nav.links a { position: relative; }
+nav.links a.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--text); }
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .js .reveal:not(.in) figure.mini li i { width: 0; }
+}
+.tip[hidden] { display: none; }

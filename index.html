@@ -5,11 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ujjwal Vashist — Data & Audit Analytics</title>
 <meta name="description" content="Business informatics student at HFU looking for a Pflichtpraktikum in data analytics, IT audit or BI. Projects: audit analytics on ledger data and an automated AI-security digest.">
+<meta name="theme-color" content="#0c0c0b" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ujjwal Vashist — Data & Audit Analytics">
+<meta property="og:description" content="Business informatics student at HFU looking for a Pflichtpraktikum in data analytics, IT audit or BI. Projects: audit analytics on ledger data and an automated AI-security digest.">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="site.js"></script>
+<script src="chart.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -80,7 +87,7 @@
 <text class="tick" x="336.0" y="294" text-anchor="middle">first digit of the amount</text>
 </svg>
       <div class="legend"><span><i style="background:var(--bar)"></i>Whole ledger · MAD 0.0051</span><span><i style="background:var(--hot)"></i>User KOCH_J · MAD 0.0232</span><span><i style="background:var(--text);height:2px;vertical-align:3px"></i>Benford expects</span></div>
-      <figcaption>The whole ledger passes the first-digit test. One user's postings don't: too many amounts start with 4, the invoices kept just under the 5,000 € approval limit. Synthetic ledger with planted anomalies, from my <a href="work/audit-analytics.html">Audit Analytics Dashboard</a>.</figcaption>
+      <figcaption>Pick a user. The whole ledger passes the first-digit test; one user's postings don't: too many amounts start with 4, the invoices kept just under the 5,000 € approval limit. Synthetic ledger with planted anomalies, from my <a href="work/audit-analytics.html">Audit Analytics Dashboard</a>.</figcaption>
     </figure>
   </section>
 
@@ -98,6 +105,7 @@
       <a class="case" href="work/audit-analytics.html">
         <div class="label">Audit analytics · journal-entry testing</div>
         <div class="metric">7 tests</div><div class="metric-note">on 4,007 ledger postings, every planted anomaly found</div>
+        <figure class="mini" aria-label="Postings flagged per test"><figcaption>Postings flagged per test</figcaption><ul><li><span>Just below the limit</span><i style="--w:100%"></i><b>98</b></li><li><span>Round amounts</span><i style="--w:31%"></i><b>30</b></li><li><span>Weekend / holiday</span><i style="--w:26%"></i><b>25</b></li><li><span>Duplicates</span><i style="--w:24%"></i><b>24</b></li><li><span>Segregation of duties</span><i style="--w:8%"></i><b>8</b></li><li><span>Number gaps</span><i style="--w:5%"></i><b>5</b></li></ul></figure>
         <h3>Audit Analytics Dashboard</h3>
         <p>Runs the journal-entry tests auditors use on general-ledger data: duplicates, number gaps, weekend postings, round amounts, amounts just below the approval limit, segregation of duties and Benford's law. Exports an Excel exception list.</p>
         <div class="tags"><span>Python</span><span>pandas</span><span>SQL</span><span>Streamlit</span><span>pytest</span></div>
@@ -106,6 +114,7 @@
       <a class="case" href="work/llm-risk-radar.html">
         <div class="label">AI security · automated reporting</div>
         <div class="metric">13 feeds</div><div class="metric-note">sorted weekly into the OWASP Top 10 for LLM apps</div>
+        <figure class="mini" aria-label="Headlines per OWASP risk"><figcaption>Headlines per risk, Apr – Oct 2026 (36 of 88 fit no single risk)</figcaption><ul><li><span>LLM06 Excessive agency</span><i style="--w:100%"></i><b>25</b></li><li><span>LLM01 Prompt injection</span><i style="--w:64%"></i><b>16</b></li><li><span>LLM02 Sensitive data</span><i style="--w:12%"></i><b>3</b></li><li><span>LLM03 Supply chain</span><i style="--w:12%"></i><b>3</b></li><li><span>LLM09 Misinformation</span><i style="--w:12%"></i><b>3</b></li><li><span>LLM05 · LLM07</span><i style="--w:8%"></i><b>2</b></li></ul></figure>
         <h3>LLM Risk Radar</h3>
         <p>A weekly digest of AI-security news that builds and publishes itself. Keyword rules in English and German sort each headline into an OWASP LLM risk. Includes a one-page "Using AI safely" sheet for colleagues.</p>
         <div class="tags"><span>Python</span><span>GitHub Actions</span><span>GitHub Pages</span><span>pytest</span></div>
