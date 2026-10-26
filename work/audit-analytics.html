@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audit Analytics Dashboard — Ujjwal Vashist</title>
+<meta name="description" content="Journal-entry tests on general-ledger data with SQL and pandas, Benford's law per user, and an Excel exception list.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="../site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html">Ujjwal Vashist<span class="mono">Data &amp; Audit Analytics</span></a>
+  <nav class="links" aria-label="Sections"><a href="../index.html#work">Work</a><a href="../index.html#education">Education</a><a href="../index.html#about">About</a></nav>
+  <div class="actions">
+    <button class="iconbtn" id="theme" type="button" aria-label="Switch theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
+    <a class="btn" href="../index.html#contact">Contact</a>
+  </div>
+</div></header>
+
+<main id="main" class="wrap"><article class="study">
+  <a class="back" href="../index.html#work">← All work</a>
+  <div class="label" style="margin-top:28px">Case study · Audit analytics</div>
+  <h1>Audit Analytics Dashboard</h1>
+  <p class="lead">Auditors can't read every booking. They run <b>journal-entry tests</b>, rules that pull out the postings most likely to be wrong or manipulated. This dashboard runs seven of them on a ledger export and hands the auditor a short exception list.</p>
+  <div class="cta"><a class="btn" href="https://ujjwalvashist.github.io/audit-analytics-dashboard/">Results page ↗</a><a class="btn ghost" href="https://github.com/UjjwalVashist/audit-analytics-dashboard">Code on GitHub ↗</a></div>
+
+  <div class="stats">
+    <div><b>4,007</b><span>synthetic SAP-style postings</span></div>
+    <div><b>7</b><span>journal-entry tests</span></div>
+    <div><b>10</b><span>pytest tests, every planted anomaly found</span></div>
+  </div>
+
+  <h2>Why synthetic data</h2>
+  <p>Real ledgers are confidential. More importantly, with real data you can't prove a check works, because you don't know the right answer. So I generated a realistic ledger and planted known problems in it: 12 duplicate pairs, 5 gaps in document numbers, 25 weekend and holiday postings, 30 round amounts, 8 postings entered and approved by the same person, and one user who books 60 invoices just under the 5,000 € approval limit. The tests generate fresh data with a different random seed and check that exactly these are found.</p>
+
+  <h2>The checks</h2>
+  <table class="t">
+    <thead><tr><th>Test</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td>Duplicate postings</td><td>SQL <code>GROUP BY</code> vendor, account, amount, date and text, <code>HAVING COUNT(*) &gt; 1</code></td></tr>
+      <tr><td>Gaps in document numbers</td><td>SQL window function <code>LAG()</code> compares each number with the previous one</td></tr>
+      <tr><td>Weekend and holiday postings</td><td>pandas, with German public holidays for Baden-Württemberg</td></tr>
+      <tr><td>Round amounts</td><td>Whole-euro amounts that divide by 1,000</td></tr>
+      <tr><td>Just below the approval limit</td><td>Amounts from 4,500 € to just under 5,000 €, counted per user</td></tr>
+      <tr><td>Segregation of duties</td><td>The same user entered and approved the posting</td></tr>
+      <tr><td>Benford's law</td><td>First-digit shares against <code>log10(1 + 1/d)</code>, measured with Nigrini's MAD</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The most interesting result</h2>
+  <p>The whole ledger <b>conforms</b> to Benford's law (MAD 0.0051, "close conformity"). Looking only at the total, nothing seems wrong. Split by user, <b>KOCH_J doesn't conform</b> (MAD 0.0232): 17.1% of their amounts start with a 4, where 9.7% is expected. Those are the invoices kept just under the limit.</p>
+  <p>The lesson: analyse subsets such as users, vendors and accounts, because manipulation hides in the totals. Sixty postings are only 1.5% of the ledger, but a large share of one person's work.</p>
+
+  <h2>Decisions</h2>
+  <ul>
+    <li><b>SQL for the rule checks:</b> audit data comes from ERP databases, and SQL is what audit-analytics teams use. SQLite needs no server, so anyone can run it.</li>
+    <li><b>MAD instead of only chi-square:</b> with thousands of postings, chi-square flags tiny, irrelevant differences. MAD doesn't depend on sample size.</li>
+    <li><b>A test flags candidates; the auditor decides.</b> One invoice of 4,900 € means nothing. The pattern does: one user with many of them.</li>
+  </ul>
+
+  <h2>What I'd add next</h2>
+  <p>Reading SAP tables BKPF and BSEG directly, debit and credit handling, posting-text analysis (keywords like "correction"), vendor master checks, and a risk score that combines several flags per posting.</p>
+
+  <p class="label" style="margin-top:40px">Python · pandas · SQL (SQLite) · Streamlit · Plotly · pytest · Git</p>
+</article></main>
+<footer><div class="wrap">
+  <div class="cols">
+    <div><span class="label">Elsewhere</span><b><a href="https://github.com/UjjwalVashist">GitHub</a> · <a href="https://www.linkedin.com/in/ujjwalvashist">LinkedIn</a></b></div>
+    <div><span class="label">Local time</span><b><span id="clock">--:--</span> · Stuttgart</b>CET / CEST</div>
+    <div><span class="label">Colophon</span><b>Plain HTML, CSS and a little JavaScript</b>Set in Geist · Updated Oct 2026</div>
+  </div>
+  <div class="base"><span>© 2026 Ujjwal Vashist</span><a href="#main">Back to top ↑</a></div>
+</div></footer>
+</body>
+</html>

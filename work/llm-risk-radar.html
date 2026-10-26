@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Risk Radar — Ujjwal Vashist</title>
+<meta name="description" content="A weekly AI-security digest that sorts news into the OWASP Top 10 for LLM Applications and publishes itself with GitHub Actions.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="../site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html">Ujjwal Vashist<span class="mono">Data &amp; Audit Analytics</span></a>
+  <nav class="links" aria-label="Sections"><a href="../index.html#work">Work</a><a href="../index.html#education">Education</a><a href="../index.html#about">About</a></nav>
+  <div class="actions">
+    <button class="iconbtn" id="theme" type="button" aria-label="Switch theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
+    <a class="btn" href="../index.html#contact">Contact</a>
+  </div>
+</div></header>
+
+<main id="main" class="wrap"><article class="study">
+  <a class="back" href="../index.html#work">← All work</a>
+  <div class="label" style="margin-top:28px">Case study · AI security · automation</div>
+  <h1>LLM Risk Radar</h1>
+  <p class="lead">Companies are rolling out AI assistants faster than staff learn the risks. This is a weekly digest of AI-security news, sorted by the <b>OWASP Top 10 for LLM Applications</b>, that builds and publishes itself every Monday.</p>
+  <div class="cta"><a class="btn" href="https://ujjwalvashist.github.io/llm-risk-radar/">Live site ↗</a><a class="btn ghost" href="https://github.com/UjjwalVashist/llm-risk-radar">Code on GitHub ↗</a></div>
+
+  <div class="stats">
+    <div><b>13</b><span>public news feeds, English and German</span></div>
+    <div><b>10</b><span>OWASP LLM risks to sort into</span></div>
+    <div><b>32</b><span>offline tests</span></div>
+  </div>
+
+  <h2>How it works</h2>
+  <ol>
+    <li><b>Read:</b> fetches 13 RSS and Atom feeds, including heise Security, the BSI, NCSC UK, Google and Microsoft security blogs.</li>
+    <li><b>Filter:</b> general security news is kept only when it mentions an AI term such as AI, LLM, KI or ChatGPT, matched as whole words.</li>
+    <li><b>Sort:</b> each OWASP risk has keyword lists in English and German. The risk with the most hits wins; a hit in the title counts double. No hit means "Other AI security news".</li>
+    <li><b>Publish:</b> writes a static site with the current week, an archive, a trend table and the ten risks in plain words.</li>
+    <li><b>Schedule:</b> GitHub Actions runs the tests and the update every Monday and commits the new pages to GitHub Pages.</li>
+  </ol>
+
+  <h2>Why keyword rules and not an AI model</h2>
+  <p>Every decision can be explained ("this headline matched <i>prompt injection</i>"), tested and reproduced, and it costs nothing to run. The price is accuracy: rules miss items that describe a risk in other words. The share of "Other" shows how much the rules don't cover, and improving a rule means editing one line of config.</p>
+
+  <h2>"Using AI safely" sheet</h2>
+  <p>The site also has a printable one-page sheet in English and German ("KI sicher nutzen"): eight everyday rules for people who use AI assistants at work, such as keeping confidential data out of public tools and reviewing AI-written code before running it. Each rule names the OWASP risk it protects against.</p>
+
+  <h2>Security of the tool itself</h2>
+  <p>Feed content is untrusted input. Everything is HTML-escaped before it reaches the page, and a test checks that a headline containing a script tag can't inject code into the site.</p>
+
+  <p class="label" style="margin-top:40px">Python · feedparser · TOML · pytest · GitHub Actions · GitHub Pages</p>
+</article></main>
+<footer><div class="wrap">
+  <div class="cols">
+    <div><span class="label">Elsewhere</span><b><a href="https://github.com/UjjwalVashist">GitHub</a> · <a href="https://www.linkedin.com/in/ujjwalvashist">LinkedIn</a></b></div>
+    <div><span class="label">Local time</span><b><span id="clock">--:--</span> · Stuttgart</b>CET / CEST</div>
+    <div><span class="label">Colophon</span><b>Plain HTML, CSS and a little JavaScript</b>Set in Geist · Updated Oct 2026</div>
+  </div>
+  <div class="base"><span>© 2026 Ujjwal Vashist</span><a href="#main">Back to top ↑</a></div>
+</div></footer>
+</body>
+</html>
