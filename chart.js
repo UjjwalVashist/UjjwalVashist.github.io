@@ -2,13 +2,13 @@
 (() => {
   const EXPECTED = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(d => Math.log10(1 + 1 / d));
   const DATA = {
-    "Whole ledger": { n: 4007, mad: 0.0051, verdict: "close conformity", obs: [0.2952, 0.1726, 0.1201, 0.1078, 0.0862, 0.0583, 0.0595, 0.0522, 0.0482] },
-    "KOCH_J": { n: 731, mad: 0.0232, verdict: "nonconformity", obs: [0.292, 0.1612, 0.0689, 0.1708, 0.1006, 0.0427, 0.0592, 0.0565, 0.0482] },
+    "Whole ledger": { n: 4007, mad: 0.005, verdict: "close conformity", obs: [0.2949, 0.1733, 0.1201, 0.1078, 0.0862, 0.0583, 0.0595, 0.052, 0.048] },
+    "KOCH_J": { n: 729, mad: 0.0234, verdict: "nonconformity", obs: [0.2928, 0.1602, 0.0677, 0.1713, 0.1008, 0.0428, 0.0594, 0.0566, 0.0483] },
     "WEBER_K": { n: 668, mad: 0.0116, verdict: "acceptable conformity", obs: [0.3298, 0.1928, 0.1295, 0.0828, 0.0783, 0.0482, 0.0602, 0.0377, 0.0407] },
-    "HOFFMANN_S": { n: 699, mad: 0.0106, verdict: "acceptable conformity", obs: [0.2672, 0.181, 0.1178, 0.0991, 0.0948, 0.0603, 0.0632, 0.0632, 0.0532] },
-    "SCHMIDT_A": { n: 619, mad: 0.0094, verdict: "acceptable conformity", obs: [0.2871, 0.168, 0.1338, 0.1077, 0.0799, 0.0734, 0.0375, 0.0587, 0.0538] },
-    "FISCHER_L": { n: 661, mad: 0.0083, verdict: "acceptable conformity", obs: [0.2988, 0.1631, 0.1341, 0.0838, 0.0823, 0.0595, 0.0762, 0.0579, 0.0442] },
-    "BECKER_M": { n: 629, mad: 0.0057, verdict: "close conformity", obs: [0.2971, 0.1693, 0.1438, 0.0958, 0.0783, 0.0687, 0.0591, 0.0383, 0.0495] },
+    "HOFFMANN_S": { n: 697, mad: 0.0106, verdict: "acceptable conformity", obs: [0.2666, 0.1816, 0.1182, 0.0994, 0.0951, 0.0605, 0.0634, 0.062, 0.0533] },
+    "SCHMIDT_A": { n: 617, mad: 0.0094, verdict: "acceptable conformity", obs: [0.2864, 0.1686, 0.1342, 0.108, 0.0802, 0.0736, 0.0376, 0.0573, 0.054] },
+    "FISCHER_L": { n: 659, mad: 0.0085, verdict: "acceptable conformity", obs: [0.2982, 0.1636, 0.1346, 0.0841, 0.0826, 0.0596, 0.0765, 0.0581, 0.0428] },
+    "BECKER_M": { n: 628, mad: 0.0054, verdict: "close conformity", obs: [0.2976, 0.1696, 0.1424, 0.096, 0.0784, 0.0688, 0.0592, 0.0384, 0.0496] },
   };
   const W = 640, H = 300, L = 44, R = 12, T = 22, B = 40, MAX = 0.34;
   const ph = H - T - B, step = (W - L - R) / 9, bw = step * 0.46;

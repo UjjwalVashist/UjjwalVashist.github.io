@@ -31,17 +31,17 @@
   <a class="back" href="../index.html#work">← All work</a>
   <div class="label" style="margin-top:28px">Case study · Audit analytics</div>
   <h1>Audit Analytics Dashboard</h1>
-  <p class="lead">Auditors can't read every booking. They run <b>journal-entry tests</b>, rules that pull out the postings most likely to be wrong or manipulated. This dashboard runs seven of them on a ledger export and hands the auditor a short exception list.</p>
-  <div class="cta"><a class="btn" href="https://ujjwalvashist.github.io/audit-analytics-dashboard/">Results page ↗</a><a class="btn ghost" href="https://github.com/UjjwalVashist/audit-analytics-dashboard">Code on GitHub ↗</a></div>
+  <p class="lead">Auditors can't read every booking. They run <b>journal-entry tests</b>, rules that pull out the postings most likely to be wrong or manipulated. This app runs nine of them from audit practice (ISA 240) on every posting, gives each flagged posting risk points, and ranks them so the auditor starts with the entries that fail the most.</p>
+  <div class="cta"><a class="btn" href="https://ujjwalvashist.github.io/audit-analytics-dashboard/">Open the live app ↗</a><a class="btn ghost" href="https://github.com/UjjwalVashist/audit-analytics-dashboard">Code on GitHub ↗</a></div>
 
   <div class="stats">
     <div><b>4,007</b><span>synthetic SAP-style postings</span></div>
-    <div><b>7</b><span>journal-entry tests</span></div>
-    <div><b>10</b><span>pytest tests, every planted anomaly found</span></div>
+    <div><b>9</b><span>ISA 240 tests + Benford, with risk scoring</span></div>
+    <div><b>18</b><span>pytest tests, every planted anomaly found</span></div>
   </div>
 
   <h2>Why synthetic data</h2>
-  <p>Real ledgers are confidential. More importantly, with real data you can't prove a check works, because you don't know the right answer. So I generated a realistic ledger and planted known problems in it: 12 duplicate pairs, 5 gaps in document numbers, 25 weekend and holiday postings, 30 round amounts, 8 postings entered and approved by the same person, and one user who books 60 invoices just under the 5,000 € approval limit. The tests generate fresh data with a different random seed and check that exactly these are found.</p>
+  <p>Real ledgers are confidential. More importantly, with real data you can't prove a check works, because you don't know the right answer. So I generated a realistic ledger and planted known problems in it: 12 duplicate pairs, 5 gaps in document numbers, 25 weekend and holiday postings, 30 round amounts, 8 postings entered and approved by the same person, one user who books 60 invoices just under the 5,000 € approval limit, 10 post-closing entries, 15 late-night entries, 12 entries without a description – and a management-override case: the head of finance, who rarely posts, books three round 25,000 € amounts after closing, at 23:41, with no text. The tests generate fresh data with a different random seed and check that exactly these are found.</p>
 
   <h2>The checks</h2>
   <table class="t">
@@ -53,12 +53,19 @@
       <tr><td>Round amounts</td><td>Whole-euro amounts that divide by 1,000</td></tr>
       <tr><td>Just below the approval limit</td><td>Amounts from 4,500 € to just under 5,000 €, counted per user</td></tr>
       <tr><td>Segregation of duties</td><td>The same user entered and approved the posting</td></tr>
+      <tr><td>Post-closing entries</td><td>Entered after year end (<code>CPUDT</code>) but dated into the closed year (<code>BUDAT</code>)</td></tr>
+      <tr><td>Late-night entries</td><td>Entry time (<code>CPUTM</code>) between 20:00 and 06:00</td></tr>
+      <tr><td>Rare posters</td><td>SQL: users with under 1% of all postings, such as a manager who normally only approves</td></tr>
+      <tr><td>No description</td><td>Posting text empty or under 4 characters</td></tr>
       <tr><td>Benford's law</td><td>First-digit shares against <code>log10(1 + 1/d)</code>, measured with Nigrini's MAD</td></tr>
     </tbody>
   </table>
 
+  <h2>Risk scoring</h2>
+  <p>229 flagged postings are too many to check one by one. Each test has points – 3 for strong signals (duplicates, broken four-eyes principle, post-closing), 2 for medium ones, 1 for weak ones – and a posting gets the points of every test it fails: High 3+, Medium 2, Low 1. The planted management-override entries fail five tests at once and rank first with 9 points. It's the idea behind the risk-based samples in tools like MindBridge or CaseWare IDEA, kept as a transparent rule. Before any test, a population check reconciles the extract (count, total, document range, gaps), which the revised ISA 240 makes an explicit step.</p>
+
   <h2>The most interesting result</h2>
-  <p>The whole ledger <b>conforms</b> to Benford's law (MAD 0.0051, "close conformity"). Looking only at the total, nothing seems wrong. Split by user, <b>KOCH_J doesn't conform</b> (MAD 0.0232): 17.1% of their amounts start with a 4, where 9.7% is expected. Those are the invoices kept just under the limit.</p>
+  <p>The whole ledger <b>conforms</b> to Benford's law (MAD 0.0050, "close conformity"). Looking only at the total, nothing seems wrong. Split by user, <b>KOCH_J doesn't conform</b> (MAD 0.0234): 17.1% of their amounts start with a 4, where 9.7% is expected. Those are the invoices kept just under the limit.</p>
   <p>The lesson: analyse subsets such as users, vendors and accounts, because manipulation hides in the totals. Sixty postings are only 1.5% of the ledger, but a large share of one person's work.</p>
 
   <h2>Decisions</h2>
@@ -69,7 +76,7 @@
   </ul>
 
   <h2>What I'd add next</h2>
-  <p>Reading SAP tables BKPF and BSEG directly, debit and credit handling, posting-text analysis (keywords like "correction"), vendor master checks, and a risk score that combines several flags per posting.</p>
+  <p>Reading SAP tables BKPF and BSEG directly, debit and credit handling, posting-text analysis (keywords like "correction"), and vendor master checks such as a vendor sharing an employee's bank account.</p>
 
   <p class="label" style="margin-top:40px">Python · pandas · SQL (SQLite) · Streamlit · Plotly · pytest · Git</p>
 </article></main>
@@ -77,7 +84,7 @@
   <div class="cols">
     <div><span class="label">Elsewhere</span><b><a href="https://github.com/UjjwalVashist">GitHub</a> · <a href="https://www.linkedin.com/in/ujjwalvashist">LinkedIn</a></b></div>
     <div><span class="label">Local time</span><b><span id="clock">--:--</span> · Stuttgart</b>CET / CEST</div>
-    <div><span class="label">Colophon</span><b>Plain HTML, CSS and a little JavaScript</b>Set in Geist · Updated Oct 2026</div>
+    <div><span class="label">Colophon</span><b>Plain HTML, CSS and a little JavaScript</b>Set in Geist · Updated Nov 2026</div>
   </div>
   <div class="base"><span>© 2026 Ujjwal Vashist</span><a href="#main">Back to top ↑</a></div>
 </div></footer>
